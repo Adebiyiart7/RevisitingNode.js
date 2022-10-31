@@ -1,14 +1,13 @@
 // NODE_MODULE
 require("dotenv").config();
-const Joi = require("joi");
 const port = process.env.PORT;
 const helmet = require("helmet");
 const express = require("express");
 // const morgan = require("morgan");
 
 // LOCAL IMPORTS
-const logger = require("./logger");
-const authenticate = require("./auth");
+const logger = require("./middleware/logger");
+const authenticate = require("./middleware/auth");
 const courses = require("./routes/courses");
 
 const app = express();
