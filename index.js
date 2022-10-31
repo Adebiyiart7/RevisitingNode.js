@@ -14,20 +14,14 @@ let courses = [
   { id: "4", name: "Course4" },
 ];
 
-app.get("/", (req, res) => {
-  res.json("Hello World!");
-});
-
-app.get("/api/courses", (req, res) => {
-  res.json([1, 2, 3]);
-});
-
+// GET COURSE
 app.get("/api/courses/:id", (req, res) => {
   const course = courses.find((c) => c.id === req.params.id);
   if (!course) res.status(404).json("Course not found");
   res.json(course.name);
 });
 
+// CREATE COURSE
 app.post("/api/courses", (req, res) => {
   const { error } = validateCourse(req.body);
   if (error) return res.status(400).send("Bad request.");
@@ -41,6 +35,7 @@ app.post("/api/courses", (req, res) => {
   return res.json(course);
 });
 
+// UPDATE COURSE
 app.put("/api/courses/:id", (req, res) => {
   let course = courses.find((c) => c.id === req.params.id.toString());
   if (!course) return res.status(404).send("Course not found!");
@@ -53,6 +48,7 @@ app.put("/api/courses/:id", (req, res) => {
   return res.status(200).json(course);
 });
 
+// DELETE COURSE
 app.delete("/api/courses/:id", (req, res) => {
   let course = courses.find((c) => c.id === req.params.id.toString());
   if (!course) return res.status(404).send("Course not found!");
