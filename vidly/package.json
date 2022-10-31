@@ -1,5 +1,5 @@
 {
-  "name": "nodejs",
+  "name": "vidly",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -14,8 +14,5 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "joi": "^17.6.4"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.20"
   }
 }

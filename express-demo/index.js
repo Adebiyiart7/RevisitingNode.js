@@ -1,11 +1,16 @@
 require("dotenv").config();
-const port = process.env.PORT;
 const Joi = require("joi");
+const logger = require("./logger");
+const authenticate = require("./auth");
+const port = process.env.PORT;
 const express = require("express");
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(logger);
+app.use(authenticate);
 
 let courses = [
   { id: "1", name: "Course1" },
