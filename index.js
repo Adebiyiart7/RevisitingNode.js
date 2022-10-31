@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const courses = [
+let courses = [
   { id: "1", name: "Course1" },
   { id: "2", name: "Course2" },
   { id: "3", name: "Course3" },
@@ -29,15 +29,8 @@ app.get("/api/courses/:id", (req, res) => {
 });
 
 app.post("/api/courses", (req, res) => {
-  const schema = Joi.object({
-    name: Joi.string().min(3).required(),
-  });
-
-  const result = schema.validate(req.body);
-
-  if (result.error) {
-    return res.status(400).json(result.error.details[0].message); // Bad Request
-  }
+  const { error } = validateCourse(req.body);
+  if (error) return res.status(400).send("Bad request.");
 
   const course = {
     id: courses.length + 1,
@@ -49,19 +42,34 @@ app.post("/api/courses", (req, res) => {
 });
 
 app.put("/api/courses/:id", (req, res) => {
-  const course = courses.filter((c) => c.id === req.params.id.toString());
-
+  let course = courses.find((c) => c.id === req.params.id.toString());
   if (!course) return res.status(404).send("Course not found!");
 
+  const { error } = validateCourse(req.body);
+  if (error) return res.status(400).send("Bad request.");
+
+  course.name = req.body.name;
+  console.log(course);
+  return res.status(200).json(course);
+});
+
+app.delete("/api/courses/:id", (req, res) => {
+  let course = courses.find((c) => c.id === req.params.id.toString());
+  if (!course) return res.status(404).send("Course not found!");
+
+  const { error } = validateCourse(req.body);
+  if (error) return res.status(400).send("Bad request.");
+
+  courses = courses.filter((c) => c.id !== req.params.id);
+  return res.status(200).json(courses);
+});
+
+const validateCourse = (course) => {
   const schema = Joi.object({
     name: Joi.string().min(3).required(),
   });
 
-  const result = schema.validate(req.body);
-  if (result.error) return res.status(400).send("Bad request.");
-
-  cours;
-  return res.status(200).json;
-});
+  return schema.validate(course);
+};
 
 app.listen(port, () => console.log(`Listening on port ${port}...`));
